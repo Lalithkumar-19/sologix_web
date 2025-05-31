@@ -6,3 +6,5 @@ const router=express.Router();
 
 router.post("/verify-payment",VerifyToken, verifyPayment )
 router.post('/create-order', VerifyToken,createOrder);
+
+module.exports = router;
