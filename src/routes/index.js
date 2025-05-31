@@ -42,6 +42,8 @@ router.use("/v1/products",require("./products"));
 router.use(VerifyToken);
 router.use("/v1/cart",require("./cart"));
 
+router.use("/v1/payments", require("./payments"));
+
 
 // Protect all routes after this middleware
 
