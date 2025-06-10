@@ -4,6 +4,7 @@ const {
   UnauthorizedError,
   IsExists,
   FindAndUpdate,
+  HandleServerError,
 } = require("../controllers/BaseController");
 const { User } = require("../models");
 
@@ -26,6 +27,7 @@ const VerifyToken = (req, res, next) => {
       });
     } else return UnauthorizedError(res);
   } catch (err) {
+    console.error(err);
     HandleServerError(res, req, err);
   }
 };

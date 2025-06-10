@@ -42,7 +42,7 @@ router.use("/v1/products",require("./products"));
 router.use(VerifyToken);
 router.use("/v1/cart",require("./cart"));
 
-router.use("/v1/payments", require("./payments"));
+router.use("/v1/payments",require("./payments"));
 
 
 // Protect all routes after this middleware
@@ -51,7 +51,7 @@ router.use("/v1/payments", require("./payments"));
 //Global error handler
 router.use((req, res) => {
   res.status(500);
-  res.json({ status: "failed", error: "Internal Server Error." });
+  res.json({ status: "failedd", error: "Internal Server Error." });
 });
 
 module.exports = router;

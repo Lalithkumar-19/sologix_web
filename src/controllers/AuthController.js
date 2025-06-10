@@ -75,7 +75,9 @@ module.exports = {
   },
   Login: async (req, res, next) => {
     try {
+      console.log("login");
       const { email = "", password = "" } = req.body;
+      console.log(email, password);
       if (!ValidateEmail(email.trim()))
         return HandleError(
           res,

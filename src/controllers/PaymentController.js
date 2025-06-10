@@ -1,5 +1,11 @@
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
+const { payments } = require("../models/Payments");
+const { Payments } = require("../models");
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID || "",
+  key_secret: process.env.RAZORPAY_KEY_SECRET || "",
+});
 
 exports.createOrder = async (req, res) => {
   try {
@@ -30,16 +36,11 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_qtfHIjOyxlQnr5",
-  key_secret: process.env.RAZORPAY_KEY_SECRET || "KwAhGkK6ROj2UJqdF6OsaCyR",
-});
-
 exports.verifyPayment = async (req, res) => {
   try {
     const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
       req.body;
-    console.log("rqzorpay", req.body);
+    console.log("razorpay", req.body);
     if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature) {
       return res.status(400).json({
         success: false,
@@ -96,6 +97,70 @@ exports.verifyPayment = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server error during payment verification",
+      error: error.message,
+    });
+  }
+};
+
+exports.GetPayments = async (req, res) => {
+  try {
+    const { user_id } = req;
+    if (!user_id) {
+      res.status(400).json("Please give user Id");
+      return;
+    }
+    const details = await Payments.find({ user_id: user_id });
+    res.status(200).json(details);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+exports.Store_Payments = async (req, res) => {
+    console.log("store",req.body);
+  try {
+    const {razorpay_order_id, razorpay_payment_id, amount_paid,productNames } =
+      req.body;
+      const user_id=req.user_id;
+    if (
+      !user_id ||
+      !razorpay_order_id ||
+      !razorpay_payment_id ||
+      !amount_paid||!productNames
+    ) {
+      res.status(400).json("some required fields are missing");
+      return;
+    }
+    // productNames=JSON.parse(productNames);
+    await Payments.create({
+      user_id,
+      razorpay_order_id,
+      razorpay_payment_id,
+      amount_paid,
+      productNames
+    });
+    res.status(200).json("saved sucessfully");
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+exports.Get_all_payments = async (req, res) => {
+  try {
+    const payments = await Payments.find().populate({path:"user_id",select:"email phone"});
+    res.status(200).json(payments);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
       error: error.message,
     });
   }
