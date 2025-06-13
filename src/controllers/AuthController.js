@@ -75,20 +75,27 @@ module.exports = {
   },
   Login: async (req, res, next) => {
     try {
-      console.log("login");
       const { email = "", password = "" } = req.body;
-      console.log(email, password);
-      if (!ValidateEmail(email.trim()))
-        return HandleError(
-          res,
-          "Please enter a valid email id i.e abc@gmail.com"
-        );
       if (password == "")
         return HandleError(res, "Please enter the password !");
+
+      let whereClause = {};
+      if (ValidateEmail(email.trim())) {
+        whereClause = { email: email };
+      } else if (ValidateMobile(email.trim())) {
+        whereClause = { phone: email };
+      } else {
+        return HandleError(
+          res,
+          "Please enter a valid email id or phone number!"
+        );
+      }
+
       let isUserExists = await IsExistsOne({
         model: User,
-        where: { email: email },
+        where: whereClause,
       });
+
       if (!isUserExists) {
         return HandleError(res, "User doesn't exists!");
       }

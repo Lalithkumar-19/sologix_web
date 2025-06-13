@@ -3,8 +3,8 @@ const crypto = require("crypto");
 const { payments } = require("../models/Payments");
 const { Payments } = require("../models");
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || "",
-  key_secret: process.env.RAZORPAY_KEY_SECRET || "",
+  key_id: "rzp_test_DG0WOtGWfdYuXL" || "",
+  key_secret: "tRza0kOThAU8ebAEV2uGm8OX" || "",
 });
 
 exports.createOrder = async (req, res) => {
@@ -121,16 +121,21 @@ exports.GetPayments = async (req, res) => {
 };
 
 exports.Store_Payments = async (req, res) => {
-    console.log("store",req.body);
+  console.log("store", req.body);
   try {
-    const {razorpay_order_id, razorpay_payment_id, amount_paid,productNames } =
-      req.body;
-      const user_id=req.user_id;
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      amount_paid,
+      productNames,
+    } = req.body;
+    const user_id = req.user_id;
     if (
       !user_id ||
       !razorpay_order_id ||
       !razorpay_payment_id ||
-      !amount_paid||!productNames
+      !amount_paid ||
+      !productNames
     ) {
       res.status(400).json("some required fields are missing");
       return;
@@ -141,7 +146,7 @@ exports.Store_Payments = async (req, res) => {
       razorpay_order_id,
       razorpay_payment_id,
       amount_paid,
-      productNames
+      productNames,
     });
     res.status(200).json("saved sucessfully");
   } catch (error) {
@@ -155,7 +160,10 @@ exports.Store_Payments = async (req, res) => {
 
 exports.Get_all_payments = async (req, res) => {
   try {
-    const payments = await Payments.find().populate({path:"user_id",select:"email phone"});
+    const payments = await Payments.find().populate({
+      path: "user_id",
+      select: "email phone",
+    });
     res.status(200).json(payments);
   } catch (error) {
     return res.status(500).json({
