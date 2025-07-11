@@ -3,8 +3,8 @@ const crypto = require("crypto");
 const { payments } = require("../models/Payments");
 const { Payments } = require("../models");
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
+  key_id: "rzp_test_DG0WOtGWfdYuXL" || "",
+  key_secret: "tRza0kOThAU8ebAEV2uGm8OX" || "",
 });
 
 exports.createOrder = async (req, res) => {
