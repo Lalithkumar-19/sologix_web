@@ -63,29 +63,40 @@ const getUserCart = async (req, res) => {
 
 const removefromCart = async (req, res) => {
   try {
-    const userId = req.user_id;
+    const userId = req.userData.id; // Changed from req.user_id
     const { productId } = req.query;
 
     if (!userId || !productId) {
-      return res
-        .status(400)
-        .json({ msg: "User ID and Product ID are required" });
+      return res.status(400).json({ 
+        success: false,
+        error: "User ID and Product ID are required" 
+      });
     }
 
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ msg: "User not found" });
+      return res.status(404).json({ 
+        success: false,
+        error: "User not found" 
+      });
     }
-    user.cart = await user.cart.filter((item) => item !== productId);
+
+    // More robust filtering for ObjectId comparison
+    user.cart = user.cart.filter(item => item.toString() !== productId);
     await user.save();
-    res
-      .status(200)
-      .json({ msg: "Product removed from cart successfully", cart: user.cart });
+    
+    res.status(200).json({ 
+      success: true,
+      message: "Product removed from cart successfully", 
+      cart: user.cart 
+    });
   } catch (error) {
     console.error("Error removing from cart:", error);
-    res
-      .status(500)
-      .json({ msg: "Internal Server Error", error: error.message });
+    res.status(500).json({ 
+      success: false,
+      error: "Internal Server Error", 
+      message: error.message 
+    });
   }
 };
 
