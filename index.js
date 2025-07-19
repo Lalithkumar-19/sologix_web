@@ -9,5 +9,5 @@ mongoose.connect();
 const server = app;
 
 server.listen(port, () =>
-  console.log(`Server started on port ${port}`)
+  console.log(`Server started on port ${4000||port}`)
 );
