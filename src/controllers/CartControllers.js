@@ -63,7 +63,7 @@ const getUserCart = async (req, res) => {
 
 const removefromCart = async (req, res) => {
   try {
-    const userId = req.userData.id; // Changed from req.user_id
+    const userId = req.user_id; // Changed from req.user_id
     const { productId } = req.query;
 
     if (!userId || !productId) {
@@ -100,4 +100,42 @@ const removefromCart = async (req, res) => {
   }
 };
 
-module.exports = { addToCart, getUserCart,removefromCart };
+
+const clearCart=async(req,res)=>{
+  try {
+    const userId = req.user_id; // Changed from req.user_id
+
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        error: "User ID is required"
+      });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: "User not found"
+      });
+    }
+
+    // Clear the cart
+    user.cart = [];
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Cart cleared successfully",
+      cart: user.cart 
+    })
+  }catch (error) {
+    console.error("Error clearing cart:", error);
+    res.status(500).json({
+      success: false,
+      error: "Internal Server Error",
+      message: error.message
+    });
+  }
+}
+module.exports = { addToCart, getUserCart,removefromCart,clearCart };

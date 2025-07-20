@@ -3,8 +3,8 @@ const crypto = require("crypto");
 const { payments } = require("../models/Payments");
 const { Payments } = require("../models");
 const razorpay = new Razorpay({
-  key_id: "rzp_test_DG0WOtGWfdYuXL" || "",
-  key_secret: "tRza0kOThAU8ebAEV2uGm8OX" || "",
+  key_id: "rzp_live_owEHmNbTDuJgjq" || "",
+  key_secret: "NjC6GMOilmgzbqXMEgy4Nc4O" || "",
 });
 
 exports.createOrder = async (req, res) => {
@@ -110,6 +110,7 @@ exports.GetPayments = async (req, res) => {
       return;
     }
     const details = await Payments.find({ user_id: user_id });
+    console.log("details", details);
     res.status(200).json(details);
   } catch (error) {
     return res.status(500).json({

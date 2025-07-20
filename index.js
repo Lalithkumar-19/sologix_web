@@ -8,6 +8,6 @@ mongoose.connect();
 // listen to requests
 const server = app;
 
-server.listen(port, () =>
+server.listen(4000||port, () =>
   console.log(`Server started on port ${4000||port}`)
 );
