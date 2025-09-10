@@ -223,7 +223,7 @@ const ValidateAlphanumeric = (text) => {
   return re.test(String(text));
 };
 
-const ValidateLength = (text, min = 1, max = 25) => {
+const ValidateLength = (text, min = 2, max = 25) => {
   return text.length >= min && text.length <= max ? true : false;
 };
 
