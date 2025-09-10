@@ -10,7 +10,7 @@ const ContactSchema = new Schema(
     city: { type: String, trim: true },
     subject: { type: String, trim: true },
     message: { type: String, trim: true },
-    intrest: { type: String, trim: true },
+    intrest:[ { type: String, trim: true }],
   },
   { timestamps: true }
 );
