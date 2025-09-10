@@ -145,7 +145,7 @@ module.exports = {
   },
   ContactUs: async (req, res, next) => {
     try {
-      const { name, phone, email, state, city, subject, message, interest } =
+      const { name, phone, email, state, city, subject, message, intrest} =
         req.body;
       if (!ValidateAlphanumeric(name.trim()))
         return HandleError(res, "Please enter a valid name!");
@@ -166,7 +166,7 @@ module.exports = {
 
       const createContact = await Insert({
         model: Contact,
-        data: { name, phone, email, state, city, subject, message, intrest: interest },
+        data: { name, phone, email, state, city, subject, message, intrest },
       });
       if (!createContact) {
         return HandleError(res, "Failed to send message!");
